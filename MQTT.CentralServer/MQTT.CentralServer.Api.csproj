@@ -7,10 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MQTT.CentralServer.Data.Access\MQTT.CentralServer.Data.Access.csproj" />
+    <ProjectReference Include="..\MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj" />
     <ProjectReference Include="..\MQTT.CentralServer.WorkerService\MQTT.CentralServer.WorkerService.csproj" />
   </ItemGroup>
 

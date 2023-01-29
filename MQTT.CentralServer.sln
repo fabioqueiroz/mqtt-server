@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Api", "MQTT.CentralServer\MQTT.CentralServer.Api.csproj", "{55F7D393-A961-400D-BAD0-1C651709998B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.Api", "MQTT.CentralServer\MQTT.CentralServer.Api.csproj", "{55F7D393-A961-400D-BAD0-1C651709998B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.WorkerService", "MQTT.CentralServer.WorkerService\MQTT.CentralServer.WorkerService.csproj", "{728E0982-0A88-4C6B-9ABA-67B4B23ECC6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.WorkerService", "MQTT.CentralServer.WorkerService\MQTT.CentralServer.WorkerService.csproj", "{728E0982-0A88-4C6B-9ABA-67B4B23ECC6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Data.Access", "MQTT.CentralServer.Data.Access\MQTT.CentralServer.Data.Access.csproj", "{98034153-C7D1-4D91-86AF-7EBACD918AF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.Data.Access", "MQTT.CentralServer.Data.Access\MQTT.CentralServer.Data.Access.csproj", "{98034153-C7D1-4D91-86AF-7EBACD918AF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Entities", "MQTT.CentralServer.Entities\MQTT.CentralServer.Entities.csproj", "{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Services", "MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj", "{51358B28-70E3-4A56-B18D-C588B1C643BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{98034153-C7D1-4D91-86AF-7EBACD918AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98034153-C7D1-4D91-86AF-7EBACD918AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98034153-C7D1-4D91-86AF-7EBACD918AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

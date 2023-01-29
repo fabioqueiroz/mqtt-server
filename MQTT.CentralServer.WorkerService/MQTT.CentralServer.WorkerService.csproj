@@ -15,4 +15,8 @@
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.5.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj" />
+  </ItemGroup>
 </Project>
