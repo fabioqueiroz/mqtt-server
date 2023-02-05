@@ -23,11 +23,21 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
             return await _schedulerStatusRepository.CheckJobStatusAsync(jobName, cancellationToken);
         }
 
-        public async Task RecordSchedulerStatusAsync(string jobName, CancellationToken cancellationToken, ServiceStatus serviceStatus = ServiceStatus.Initializing)
+        public async Task RecordSchedulerStatusAsync(string jobName, CancellationToken cancellationToken)
         {
-            var schedulerStatusInfo = new SchedulerStatusInfo { SchedulerName = jobName, DateOfLastUpdate = DateTime.Now, Status = serviceStatus };
+            var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
 
             await _schedulerStatusRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
         }
+        public async Task UpdateJobStatusToClosingByNameAsync(string jobName, CancellationToken cancellationToken)
+        {
+            await _schedulerStatusRepository.UpdateJobStatusToClosingByNameAsync(jobName, cancellationToken);
+        }
+
+        public async Task DeleteJobByNameAsync(string jobName, CancellationToken cancellationToken)
+        {
+            await _schedulerStatusRepository.DeleteJobByNameAsync(jobName, cancellationToken);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MQTT.CentralServer.Controllers;
+using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.WorkerService.Services.Interfaces;
 
 namespace MQTT.CentralServer.Api.Controllers
@@ -10,10 +11,12 @@ namespace MQTT.CentralServer.Api.Controllers
     {
         private readonly ILogger<MqttServerController> _logger;
         private readonly IMqttJobService _mqttJobService;
-        public MqttServerController(ILogger<MqttServerController> logger, IMqttJobService mqttJobService)
+        private readonly ISchedulerStatusService _schedulerStatusService;
+        public MqttServerController(ILogger<MqttServerController> logger, IMqttJobService mqttJobService, ISchedulerStatusService schedulerStatusService)
         {
             _logger = logger;
             _mqttJobService = mqttJobService;
+            _schedulerStatusService = schedulerStatusService;
         }
 
         [HttpGet]
@@ -34,6 +37,13 @@ namespace MQTT.CentralServer.Api.Controllers
         public async void JobShutDown()
         {
             await _mqttJobService.StopAsync(new CancellationToken());
+        }
+
+        [HttpDelete]
+        [Route("[action]")]
+        public async void DeleteJob(string jobName)
+        {
+            await _schedulerStatusService.UpdateJobStatusToClosingByNameAsync(jobName, new CancellationToken());
         }
     }
 }

@@ -7,6 +7,7 @@ using MQTT.CentralServer.Entities.Scheduler;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.Services.SchedulerStatus;
 using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,21 +41,8 @@ namespace MQTT.CentralServer.WorkerService.Schedule
                 var _dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
                 var schedulerRepository = new SchedulerStatusRepository(_dbcontext);
 
-                if (status == (int)ServiceStatus.None)
-                {
-                    var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
-                    await schedulerRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, context.CancellationToken);
-                }
-
-                if (status == (int)ServiceStatus.Initializing)
-                {
-                    var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, context.CancellationToken);
-                    schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Started);
-                    await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, context.CancellationToken);
-                }
+                await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
             }
-
-            // retry pattern https://dotnettutorials.net/lesson/retry-pattern-in-csharp/
         }
 
         private static async Task<int> GetJobStatus(IServiceProvider serviceProvider, string jobName, CancellationToken cancellationToken)
@@ -63,6 +51,29 @@ namespace MQTT.CentralServer.WorkerService.Schedule
             var schedulerStatusService = scope.ServiceProvider.GetRequiredService<ISchedulerStatusService>();
 
             return await schedulerStatusService.CheckJobStatusAsync(jobName, cancellationToken);
+        }
+
+        private static async Task CreateOrUpdateJobAsync(int status, string jobName, SchedulerStatusRepository schedulerRepository, CancellationToken cancellationToken)
+        {
+            if (status == (int)ServiceStatus.None)
+            {
+                var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
+                await schedulerRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+            }
+
+            if (status == (int)ServiceStatus.Initializing)
+            {
+                var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
+                schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Started);
+                await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+            }
+
+            if (status == (int)ServiceStatus.Closing)
+            {
+                var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
+                schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Ended);
+                await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+            }
         }
     }
 }

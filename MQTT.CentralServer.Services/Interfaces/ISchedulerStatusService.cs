@@ -10,7 +10,9 @@ namespace MQTT.CentralServer.Services.Interfaces
 {
     public interface ISchedulerStatusService
     {
-        Task RecordSchedulerStatusAsync(string jobName, CancellationToken cancellationToken, ServiceStatus serviceStatus);
+        Task RecordSchedulerStatusAsync(string jobName, CancellationToken cancellationToken);
         Task<int> CheckJobStatusAsync(string jobName, CancellationToken cancellationToken);
+        Task UpdateJobStatusToClosingByNameAsync(string jobName, CancellationToken cancellationToken);
+        Task DeleteJobByNameAsync(string jobName, CancellationToken cancellationToken);
     }
 }

@@ -24,6 +24,10 @@ namespace MQTT.CentralServer.Entities.Scheduler
             };
         }
 
-        public void UpdateServiceStatus(ServiceStatus serviceStatus) => Status = serviceStatus;
+        public void UpdateServiceStatus(ServiceStatus serviceStatus)
+        {
+            Status = serviceStatus;
+            DateOfLastUpdate = DateTime.Now;
+        }
     }
 }

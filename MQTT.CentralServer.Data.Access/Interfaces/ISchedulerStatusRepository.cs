@@ -13,5 +13,7 @@ namespace MQTT.CentralServer.Data.Access.Interfaces
         Task<SchedulerStatusInfo> GetJobStatusByNameAsync(string jobName, CancellationToken cancellationToken);
         Task RecordSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken);
         Task UpdateSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken);
+        Task UpdateJobStatusToClosingByNameAsync(string jobName, CancellationToken cancellationToken);
+        Task DeleteJobByNameAsync(string jobName, CancellationToken cancellationToken);
     }
 }

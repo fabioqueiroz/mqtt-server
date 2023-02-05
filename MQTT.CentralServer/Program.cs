@@ -34,7 +34,12 @@ builder.Services.AddSingleton(new JobSchedule(
     cronExpression: "0/5 * * * * ?"));
 
 builder.Services.AddDbContext<Context>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), opts => opts.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds)));
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
+               opts =>
+               {
+                   opts.EnableRetryOnFailure((int)TimeSpan.FromSeconds(5).TotalSeconds);
+                   opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
+               }));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

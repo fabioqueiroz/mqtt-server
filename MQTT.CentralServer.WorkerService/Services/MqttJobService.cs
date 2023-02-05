@@ -66,7 +66,7 @@ namespace MQTT.CentralServer.WorkerService.Services
 
                 if (await Scheduler.CheckExists(job.Key, cancellationToken))
                 {
-                    await _schedulerStatusService.RecordSchedulerStatusAsync(job.Key.Name, cancellationToken, ServiceStatus.Closing);
+                    await _schedulerStatusService.RecordSchedulerStatusAsync(job.Key.Name, cancellationToken);
                 }
             }
 
