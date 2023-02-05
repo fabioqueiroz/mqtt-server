@@ -23,7 +23,7 @@ namespace MQTT.CentralServer.Data.Access.Repositories
         //}
 
         private bool _disposed;
-        internal Context _context;
+        public Context _context;
         //internal DbSet<TEntity> _dbSet;
 
         public BaseRepository(Context context)
@@ -190,11 +190,11 @@ namespace MQTT.CentralServer.Data.Access.Repositories
             }
         }
 
-        public async Task<int> CommitAsync()
+        public async Task<int> CommitAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync(cancellationToken);
             }
             catch (DbUpdateException ex)
             {

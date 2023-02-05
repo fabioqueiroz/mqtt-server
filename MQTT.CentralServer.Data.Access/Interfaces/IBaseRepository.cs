@@ -100,6 +100,6 @@ namespace MQTT.CentralServer.Data.Access.Interfaces
         /// Persists the transaction to the data source.
         /// </summary>
         /// <returns></returns>
-        Task<int> CommitAsync();
+        Task<int> CommitAsync(CancellationToken cancellationToken = default);
     }
 }

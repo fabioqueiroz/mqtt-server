@@ -22,10 +22,21 @@ namespace MQTT.CentralServer.Data.Access.Repositories
             return jobEntry != null ? (int)jobEntry.Status : 0;
         }
 
+        public async Task<SchedulerStatusInfo> GetJobStatusByNameAsync(string jobName, CancellationToken cancellationToken)
+        {
+            return await GetSingleAsync<SchedulerStatusInfo>(x => x.SchedulerName.Equals(jobName));
+        }
+
         public async Task RecordSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken)
         {
             await _context.AddAsync(schedulerStatus, cancellationToken);
-            await CommitAsync();
+            await CommitAsync(cancellationToken);
+        }
+
+        public async Task UpdateSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken)
+        {
+            _context.Update(schedulerStatus);
+            await CommitAsync(cancellationToken);
         }
     }
 }

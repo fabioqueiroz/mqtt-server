@@ -8,6 +8,7 @@ namespace MQTT.CentralServer.Entities.Enums
 {
     public enum ServiceStatus
     {
+        None = 0,
         Initializing = 1,
         Started = 2,
         Closing = 3,

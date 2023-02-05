@@ -9,7 +9,9 @@ namespace MQTT.CentralServer.Data.Access.Interfaces
 {
     public interface ISchedulerStatusRepository
     {
-        Task RecordSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken);
         Task<int> CheckJobStatusAsync(string jobName, CancellationToken cancellationToken);
+        Task<SchedulerStatusInfo> GetJobStatusByNameAsync(string jobName, CancellationToken cancellationToken);
+        Task RecordSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken);
+        Task UpdateSchedulerStatusAsync(SchedulerStatusInfo schedulerStatus, CancellationToken cancellationToken);
     }
 }

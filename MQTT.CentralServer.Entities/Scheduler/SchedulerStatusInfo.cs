@@ -13,5 +13,17 @@ namespace MQTT.CentralServer.Entities.Scheduler
         public string SchedulerName { get; set; } = string.Empty;
         public ServiceStatus Status { get; set; }
         public DateTime DateOfLastUpdate { get; set; }
+
+        public static SchedulerStatusInfo Create(string jobName)
+        {
+            return new SchedulerStatusInfo 
+            { 
+                SchedulerName = jobName,
+                DateOfLastUpdate = DateTime.Now,
+                Status = ServiceStatus.Initializing
+            };
+        }
+
+        public void UpdateServiceStatus(ServiceStatus serviceStatus) => Status = serviceStatus;
     }
 }
