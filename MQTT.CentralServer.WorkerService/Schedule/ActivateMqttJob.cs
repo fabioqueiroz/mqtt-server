@@ -6,6 +6,7 @@ using MQTT.CentralServer.Entities.Enums;
 using MQTT.CentralServer.Entities.Scheduler;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.Services.SchedulerStatus;
+using MQTT.CentralServer.WorkerService.Strategies;
 using Quartz;
 using Quartz.Impl;
 using System;
@@ -55,25 +56,45 @@ namespace MQTT.CentralServer.WorkerService.Schedule
 
         private static async Task CreateOrUpdateJobAsync(int status, string jobName, SchedulerStatusRepository schedulerRepository, CancellationToken cancellationToken)
         {
-            if (status == (int)ServiceStatus.None)
-            {
-                var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
-                await schedulerRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
-            }
+            var statusRequest = new ChangeStatusRequest(status, jobName, schedulerRepository, cancellationToken);
 
-            if (status == (int)ServiceStatus.Initializing)
+            switch (status)
             {
-                var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
-                schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Started);
-                await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
-            }
-
-            if (status == (int)ServiceStatus.Closing)
-            {
-                var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
-                schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Ended);
-                await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+                case (int)ServiceStatus.None:
+                    await statusRequest.ChangeStatus(new InitializingStrategy(jobName));
+                    break;
+                case (int)ServiceStatus.Initializing:
+                    await statusRequest.ChangeStatus(new StartedStrategy(jobName));
+                    break;
+                case (int)ServiceStatus.Closing:
+                    await statusRequest.ChangeStatus(new EndedStrategy(jobName));
+                    break;
+                default:
+                    throw new InvalidOperationException("Invalid status.");
             }
         }
+
+        //private static async Task CreateOrUpdateJobAsync(int status, string jobName, SchedulerStatusRepository schedulerRepository, CancellationToken cancellationToken)
+        //{
+        //    if (status == (int)ServiceStatus.None)
+        //    {
+        //        var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
+        //        await schedulerRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+        //    }
+
+        //    if (status == (int)ServiceStatus.Initializing)
+        //    {
+        //        var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
+        //        schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Started);
+        //        await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+        //    }
+
+        //    if (status == (int)ServiceStatus.Closing)
+        //    {
+        //        var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
+        //        schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Ended);
+        //        await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
+        //    }
+        //}
     }
 }
