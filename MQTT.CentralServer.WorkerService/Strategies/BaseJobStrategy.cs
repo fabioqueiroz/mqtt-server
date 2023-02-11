@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MQTT.CentralServer.WorkerService.Strategies
 {
-    public abstract class BaseStatusStrategy
+    public abstract class BaseJobStrategy
     {
         public string JobName { get; init; } = string.Empty;
-        public BaseStatusStrategy(string jobName)
+        public BaseJobStrategy(string jobName)
         {
             JobName = jobName;
         }

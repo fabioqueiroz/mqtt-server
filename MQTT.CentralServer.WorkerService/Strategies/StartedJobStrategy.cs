@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MQTT.CentralServer.WorkerService.Strategies
 {
-    public class StartedJobStrategy : BaseStatusStrategy, IStatusStrategy
+    public class StartedJobStrategy : BaseJobStrategy, IStatusStrategy
     {
         public StartedJobStrategy(string jobName) : base(jobName)
         {

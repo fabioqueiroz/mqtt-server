@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MQTT.CentralServer.WorkerService.Strategies
 {
-    public class InitializingJobStrategy : BaseStatusStrategy, IStatusStrategy
+    public class InitializingJobStrategy : BaseJobStrategy, IStatusStrategy
     {
         public InitializingJobStrategy(string jobName) : base(jobName)
         {
