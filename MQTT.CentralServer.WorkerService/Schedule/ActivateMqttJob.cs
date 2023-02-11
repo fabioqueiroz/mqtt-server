@@ -61,40 +61,17 @@ namespace MQTT.CentralServer.WorkerService.Schedule
             switch (status)
             {
                 case (int)ServiceStatus.None:
-                    await statusRequest.ChangeStatus(new InitializingStrategy(jobName));
+                    await statusRequest.ChangeStatus(new InitializingJobStrategy(jobName));
                     break;
                 case (int)ServiceStatus.Initializing:
-                    await statusRequest.ChangeStatus(new StartedStrategy(jobName));
+                    await statusRequest.ChangeStatus(new StartedJobStrategy(jobName));
                     break;
                 case (int)ServiceStatus.Closing:
-                    await statusRequest.ChangeStatus(new EndedStrategy(jobName));
+                    await statusRequest.ChangeStatus(new EndedJobStrategy(jobName));
                     break;
                 default:
                     throw new InvalidOperationException("Invalid status.");
             }
         }
-
-        //private static async Task CreateOrUpdateJobAsync(int status, string jobName, SchedulerStatusRepository schedulerRepository, CancellationToken cancellationToken)
-        //{
-        //    if (status == (int)ServiceStatus.None)
-        //    {
-        //        var schedulerStatusInfo = SchedulerStatusInfo.Create(jobName);
-        //        await schedulerRepository.RecordSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
-        //    }
-
-        //    if (status == (int)ServiceStatus.Initializing)
-        //    {
-        //        var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
-        //        schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Started);
-        //        await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
-        //    }
-
-        //    if (status == (int)ServiceStatus.Closing)
-        //    {
-        //        var schedulerStatusInfo = await schedulerRepository.GetJobStatusByNameAsync(jobName, cancellationToken);
-        //        schedulerStatusInfo.UpdateServiceStatus(ServiceStatus.Ended);
-        //        await schedulerRepository.UpdateSchedulerStatusAsync(schedulerStatusInfo, cancellationToken);
-        //    }
-        //}
     }
 }

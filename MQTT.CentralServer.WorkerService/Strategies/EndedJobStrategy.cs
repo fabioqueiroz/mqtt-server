@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 
 namespace MQTT.CentralServer.WorkerService.Strategies
 {
-    public class EndedStrategy : IStatusStrategy
+    public class EndedJobStrategy : BaseStatusStrategy, IStatusStrategy
     {
-        public string JobName { get; init; } = string.Empty;
-
-        public EndedStrategy(string jobName)
+        public EndedJobStrategy(string jobName) : base(jobName)
         {
-            JobName = jobName;
+
         }
 
         public async Task UpdateServiceStatus(ISchedulerStatusRepository schedulerRepository, CancellationToken cancellationToken)
