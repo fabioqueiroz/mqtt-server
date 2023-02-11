@@ -19,4 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Constants\" />
+  </ItemGroup>
 </Project>

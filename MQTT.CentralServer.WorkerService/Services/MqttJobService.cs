@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MQTT.CentralServer.Data.Access.Repositories;
 using MQTT.CentralServer.Data.Access;
 using MQTT.CentralServer.Services.SchedulerStatus;
+using MQTT.CentralServer.WorkerService.Jobs.Constants;
 
 namespace MQTT.CentralServer.WorkerService.Services
 {
@@ -95,7 +96,7 @@ namespace MQTT.CentralServer.WorkerService.Services
                 .WithDescription(schedule.CronExpression)
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                     .WithIntervalInSeconds(30)
+                     .WithIntervalInSeconds(JobValueConstants.TimeInterval)
                      .RepeatForever())
                 .Build();
         }
