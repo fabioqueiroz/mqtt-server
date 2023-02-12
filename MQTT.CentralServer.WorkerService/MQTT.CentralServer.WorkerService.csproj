@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -14,6 +14,8 @@
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.5.0" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.5.0" />
     <PackageReference Include="Quartz.Serialization.Json" Version="3.5.0" />
+    <PackageReference Include="MQTTnet" Version="4.1.1.318" />
+    <PackageReference Include="MQTTnet.AspNetCore" Version="4.1.1.318" />
   </ItemGroup>
 
   <ItemGroup>

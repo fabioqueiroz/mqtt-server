@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MQTT.CentralServer.Data.Access;
 using MQTT.CentralServer.Data.Access.Interfaces;
+using MQTT.CentralServer.Data.Access.Migrations;
 using MQTT.CentralServer.Data.Access.Repositories;
 using MQTT.CentralServer.Entities.Enums;
 using MQTT.CentralServer.Entities.Scheduler;
@@ -41,6 +42,12 @@ namespace MQTT.CentralServer.WorkerService.Schedule
             {
                 var _dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
                 var schedulerRepository = new SchedulerStatusRepository(_dbcontext);
+
+                if (status == (int)ServiceStatus.Initializing || status == (int)ServiceStatus.Started)
+                {
+                    var mqttServer = Server.MqttServer.Instance;
+                    await mqttServer.StartMqttServer();
+                }
 
                 await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
             }
