@@ -12,11 +12,17 @@ namespace MQTT.CentralServer.Api.Controllers
         private readonly ILogger<MqttServerController> _logger;
         private readonly IMqttJobService _mqttJobService;
         private readonly ISchedulerStatusService _schedulerStatusService;
-        public MqttServerController(ILogger<MqttServerController> logger, IMqttJobService mqttJobService, ISchedulerStatusService schedulerStatusService)
+        private readonly IIdentityServerService _identityServerService;
+        public MqttServerController(
+            ILogger<MqttServerController> logger, 
+            IMqttJobService mqttJobService, 
+            ISchedulerStatusService schedulerStatusService, 
+            IIdentityServerService identityServerService)
         {
             _logger = logger;
             _mqttJobService = mqttJobService;
             _schedulerStatusService = schedulerStatusService;
+            _identityServerService = identityServerService;
         }
 
         [HttpGet]
@@ -25,18 +31,33 @@ namespace MQTT.CentralServer.Api.Controllers
             return Ok("Pong");
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("[action]")]
-        public async void StartJobService()
+        public async Task<IActionResult> GetToken()
         {
-            await _mqttJobService.StartAsync(new CancellationToken());
+            return Ok(await _identityServerService.GetTokenAsync());
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async void JobShutDown()
+        public async Task<IActionResult> StartJobService([FromBody]string token)
+        {
+            var isAuthenticated = await _identityServerService.AuthenticateWithTokenAsync(token);
+            if (!isAuthenticated)
+            {
+                return BadRequest($"Unable to authenticate with token {token}");
+            }
+
+            await _mqttJobService.StartAsync(new CancellationToken());
+            return Ok("Job service started");
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> JobShutDown()
         {
             await _mqttJobService.StopAsync(new CancellationToken());
+            return Ok("Job service shut down");
         }
 
         [HttpDelete]

@@ -23,7 +23,14 @@ builder.Services
     .AddScoped<IActivateMqttService, ActivateMqttService>()
     .AddScoped<IMqttJobService, MqttJobService>()
     .AddScoped<ISchedulerStatusRepository, SchedulerStatusRepository>()
-    .AddScoped<ISchedulerStatusService, SchedulerStatusService>();
+    .AddScoped<ISchedulerStatusService, SchedulerStatusService>()
+    .AddScoped<IIdentityServerService, IdentityServerService>();
+
+builder.Services.AddHttpClient<IIdentityServerService, IdentityServerService>(c =>
+{
+    //c.BaseAddress = new Uri(builder.Configuration["ApiConfigs:IdentityServerApi:Uri"]);
+    //c.DefaultRequestHeaders.Add("key", Configuration["ApiConfigs:WeatherApi:Key"]);
+});
 
 builder.Services
     .AddSingleton<IJobFactory, JobFactory>()
@@ -34,12 +41,12 @@ builder.Services.AddSingleton(new JobSchedule(
     cronExpression: "0/5 * * * * ?"));
 
 builder.Services.AddDbContext<Context>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
-               opts =>
-               {
-                   opts.EnableRetryOnFailure((int)TimeSpan.FromSeconds(5).TotalSeconds);
-                   opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
-               }));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), 
+    opts =>
+    {
+        opts.EnableRetryOnFailure((int)TimeSpan.FromSeconds(5).TotalSeconds);
+        opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
+    }));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

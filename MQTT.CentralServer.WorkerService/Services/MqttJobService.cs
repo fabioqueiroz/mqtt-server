@@ -49,7 +49,7 @@ namespace MQTT.CentralServer.WorkerService.Services
 
                 if (!await Scheduler.CheckExists(job.Key, cancellationToken))
                 {
-                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);                   
+                    await Scheduler.ScheduleJob(job, trigger, cancellationToken);
                 }
             }
 
@@ -60,16 +60,16 @@ namespace MQTT.CentralServer.WorkerService.Services
         {
             Scheduler = await _factory.GetScheduler(cancellationToken);
 
-            foreach (var jobSchedule in _jobSchedules)
-            {
-                // replace this with something else not creating a new job
-                var job = CreateJob(jobSchedule);
+            //foreach (var jobSchedule in _jobSchedules)
+            //{
+            //    // replace this with something else not creating a new job
+            //    var job = CreateJob(jobSchedule);
 
-                if (await Scheduler.CheckExists(job.Key, cancellationToken))
-                {
-                    await _schedulerStatusService.RecordSchedulerStatusAsync(job.Key.Name, cancellationToken);
-                }
-            }
+            //    if (await Scheduler.CheckExists(job.Key, cancellationToken))
+            //    {
+            //        await _schedulerStatusService.RecordSchedulerStatusAsync(job.Key.Name, cancellationToken);
+            //    }
+            //}
 
             await Scheduler!.Shutdown(cancellationToken);
           
