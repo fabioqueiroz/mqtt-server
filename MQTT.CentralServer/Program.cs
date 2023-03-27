@@ -4,6 +4,7 @@ using MQTT.CentralServer.Api.Services.Interfaces;
 using MQTT.CentralServer.Data.Access;
 using MQTT.CentralServer.Data.Access.Interfaces;
 using MQTT.CentralServer.Data.Access.Repositories;
+using MQTT.CentralServer.Entities.Options;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.Services.SchedulerStatus;
 using MQTT.CentralServer.WorkerService.Jobs;
@@ -26,11 +27,9 @@ builder.Services
     .AddScoped<ISchedulerStatusService, SchedulerStatusService>()
     .AddScoped<IIdentityServerService, IdentityServerService>();
 
-builder.Services.AddHttpClient<IIdentityServerService, IdentityServerService>(c =>
-{
-    //c.BaseAddress = new Uri(builder.Configuration["ApiConfigs:IdentityServerApi:Uri"]);
-    //c.DefaultRequestHeaders.Add("key", Configuration["ApiConfigs:WeatherApi:Key"]);
-});
+builder.Services.AddHttpClient<IIdentityServerService, IdentityServerService>();
+
+builder.Services.Configure<ApiConfigs>(builder.Configuration.GetSection(nameof(ApiConfigs)));
 
 builder.Services
     .AddSingleton<IJobFactory, JobFactory>()

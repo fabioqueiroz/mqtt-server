@@ -1,5 +1,7 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MQTT.CentralServer.Entities.Options;
 using MQTT.CentralServer.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,16 +17,18 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<IdentityServerService> _logger;
-
-        public IdentityServerService(HttpClient httpClient, ILogger<IdentityServerService> logger)
+        private readonly IOptions<ApiConfigs> _options;
+        public IdentityServerService(HttpClient httpClient, ILogger<IdentityServerService> logger, IOptions<ApiConfigs> options)
         {
             _httpClient = httpClient;
             _logger = logger;
+            _options = options;
         }
 
         public async Task<string> GetTokenAsync()
         {
-            var discoDocument = await _httpClient.GetDiscoveryDocumentAsync("https://localhost:5001");
+            //var discoDocument = await _httpClient.GetDiscoveryDocumentAsync("https://localhost:5001");
+            var discoDocument = await _httpClient.GetDiscoveryDocumentAsync(_options.Value.IdentityProviderApi.Uri);
             if (discoDocument.IsError)
             {
                 _logger.LogError(discoDocument.Error);
@@ -33,10 +37,14 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
 
             var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
+                //Address = discoDocument.TokenEndpoint,
+                //ClientId = "m2m.client",
+                //ClientSecret = "511536EF-F270-4058-80CA-1C89C192F69A",
+                //Scope = "scope1"
                 Address = discoDocument.TokenEndpoint,
-                ClientId = "m2m.client",
-                ClientSecret = "511536EF-F270-4058-80CA-1C89C192F69A",
-                Scope = "scope1"
+                ClientId = _options.Value.IdentityServerApi.ClientId,
+                ClientSecret = _options.Value.IdentityServerApi.ClientSecret,
+                Scope = _options.Value.IdentityServerApi.Scope
             });
 
             if (tokenResponse.IsError)
@@ -54,7 +62,8 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
         {
             _httpClient.SetBearerToken(token);
 
-            var response = await _httpClient.GetAsync("https://localhost:7031/Identity");
+            //var response = await _httpClient.GetAsync("https://localhost:7031/Identity");
+            var response = await _httpClient.GetAsync(_options.Value.IdentityServerApi.Uri);
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError($"Unable to authenticate. Status response: {response.StatusCode}");

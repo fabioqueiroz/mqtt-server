@@ -43,13 +43,15 @@ namespace MQTT.CentralServer.WorkerService.Schedule
                 var _dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
                 var schedulerRepository = new SchedulerStatusRepository(_dbcontext);
 
-                if (status == (int)ServiceStatus.Initializing || status == (int)ServiceStatus.Started)
+                await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
+
+                if (status == (int)ServiceStatus.None || status == (int)ServiceStatus.Initializing || status == (int)ServiceStatus.Started)
                 {
                     var mqttServer = Server.MqttServer.Instance;
                     await mqttServer.StartMqttServer();
                 }
 
-                await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
+                //await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
             }
         }
 
