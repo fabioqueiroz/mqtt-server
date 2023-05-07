@@ -27,7 +27,6 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
 
         public async Task<string> GetTokenAsync()
         {
-            //var discoDocument = await _httpClient.GetDiscoveryDocumentAsync("https://localhost:5001");
             var discoDocument = await _httpClient.GetDiscoveryDocumentAsync(_options.Value.IdentityProviderApi.Uri);
             if (discoDocument.IsError)
             {
@@ -37,14 +36,15 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
 
             var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
+                //// In-memory scope
                 //Address = discoDocument.TokenEndpoint,
-                //ClientId = "m2m.client",
-                //ClientSecret = "511536EF-F270-4058-80CA-1C89C192F69A",
-                //Scope = "scope1"
+                //ClientId = _options.Value.IdentityServerApi.ClientId,
+                //ClientSecret = _options.Value.IdentityServerApi.ClientSecret,
+                //Scope = _options.Value.IdentityServerApi.Scope
                 Address = discoDocument.TokenEndpoint,
-                ClientId = _options.Value.IdentityServerApi.ClientId,
-                ClientSecret = _options.Value.IdentityServerApi.ClientSecret,
-                Scope = _options.Value.IdentityServerApi.Scope
+                ClientId = _options.Value.IdentityProviderApi.ClientId,
+                ClientSecret = _options.Value.IdentityProviderApi.ClientSecret,
+                Scope = _options.Value.IdentityProviderApi.Scope
             });
 
             if (tokenResponse.IsError)
