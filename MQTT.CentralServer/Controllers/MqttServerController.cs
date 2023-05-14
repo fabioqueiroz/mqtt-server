@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MQTT.CentralServer.Controllers;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.WorkerService.Services.Interfaces;
 
