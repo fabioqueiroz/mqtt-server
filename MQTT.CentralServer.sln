@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.WorkerSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.Data.Access", "MQTT.CentralServer.Data.Access\MQTT.CentralServer.Data.Access.csproj", "{98034153-C7D1-4D91-86AF-7EBACD918AF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Entities", "MQTT.CentralServer.Entities\MQTT.CentralServer.Entities.csproj", "{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.Entities", "MQTT.CentralServer.Entities\MQTT.CentralServer.Entities.csproj", "{7505E3C0-5253-46F9-ACAC-4A8D3D224A7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.CentralServer.Services", "MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj", "{51358B28-70E3-4A56-B18D-C588B1C643BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MQTT.CentralServer.Services", "MQTT.CentralServer.Services\MQTT.CentralServer.Services.csproj", "{51358B28-70E3-4A56-B18D-C588B1C643BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MQTT.ClientReactApp", "MQTT.ClientReactApp\MQTT.ClientReactApp.csproj", "{C74031DD-8699-4C02-BE99-8B98098F32A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51358B28-70E3-4A56-B18D-C588B1C643BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C74031DD-8699-4C02-BE99-8B98098F32A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74031DD-8699-4C02-BE99-8B98098F32A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74031DD-8699-4C02-BE99-8B98098F32A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74031DD-8699-4C02-BE99-8B98098F32A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
