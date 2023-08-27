@@ -91,6 +91,9 @@ export class NavMenu extends Component {
                                 </a>
                             </NavItem>
               </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/back-channel-area">Back Channel</NavLink>
+              </NavItem>
             </ul>
           </Collapse>
         </Navbar>

@@ -1,5 +1,8 @@
 using Duende.Bff.Yarp;
 using Microsoft.AspNetCore.Authentication;
+using MQTT.CentralServer.Entities.Options;
+using MQTT.CentralServer.Services.Interfaces;
+using MQTT.CentralServer.Services.Token;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,15 @@ builder.Services.AddControllersWithViews();
 builder.Services
     .AddBff()
     .AddRemoteApis();
+
+builder.Services
+    .AddReverseProxy()
+    .AddBffExtensions();
+
+builder.Services.AddHttpClient<IJwtTokenService, JwtTokenService>(c =>
+        c.BaseAddress = new Uri(builder.Configuration["ApiConfigs:BackChannelApi:Uri"]));
+
+builder.Services.Configure<ApiConfigs>(builder.Configuration.GetSection(nameof(ApiConfigs)));
 
 //LOCAL
 builder.Services.AddAuthentication(options =>
@@ -38,7 +50,7 @@ builder.Services.AddAuthentication(options =>
     options.Scope.Add("openid");
     options.Scope.Add("profile");
     options.Scope.Add("api");
-    //options.Scope.Add("offline_access");
+    options.Scope.Add("offline_access");
     options.Scope.Add("roles");
     //options.Scope.Add("client.scope");
     options.ClaimActions.MapUniqueJsonKey("role", "role");

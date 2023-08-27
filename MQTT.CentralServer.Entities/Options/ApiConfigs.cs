@@ -10,6 +10,7 @@ namespace MQTT.CentralServer.Entities.Options
     {
         public IdentityServerApi IdentityServerApi { get; init; } = new();
         public IdentityProviderApi IdentityProviderApi { get; init; } = new();
+        public BackChannelApi BackChannelApi { get; init; } = new();
     }
 
     public class IdentityServerApi
@@ -27,5 +28,11 @@ namespace MQTT.CentralServer.Entities.Options
         public string ClientId { get; init; } = string.Empty;
         public string ClientSecret { get; init; } = string.Empty;
         public string Scope { get; init; } = string.Empty;
+    }
+
+    public class BackChannelApi
+    {
+        public string Uri { get; init; } = string.Empty;
+        public string TokenEndpoint { get; init; } = string.Empty;
     }
 }
