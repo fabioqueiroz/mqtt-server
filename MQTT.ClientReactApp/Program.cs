@@ -1,8 +1,10 @@
+using Duende.Bff;
 using Duende.Bff.Yarp;
 using Microsoft.AspNetCore.Authentication;
 using MQTT.CentralServer.Entities.Options;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.Services.Token;
+using Yarp.ReverseProxy.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,43 @@ builder.Services
 builder.Services
     .AddReverseProxy()
     .AddBffExtensions();
+
+//builder.LoadFromMemory(
+//    new[]
+//    {
+//        new RouteConfig()
+//        {
+//            RouteId = "api_user",
+//            ClusterId = "cluster1",
+
+//            Match = new()
+//            {
+//                Path = "/user_api/{**catch-all}"
+//            }
+//        }.WithAccessToken(TokenType.User).WithAntiforgeryCheck(),
+//        new RouteConfig()
+//        {
+//            RouteId = "api_client",
+//            ClusterId = "cluster1",
+
+//            Match = new()
+//            {
+//                Path = "/client_api/{**catch-all}"
+//            }
+//        }.WithAccessToken(TokenType.Client).WithAntiforgeryCheck(),
+//    },
+//    new[]
+//    {
+//        new ClusterConfig
+//        {
+//            ClusterId = "cluster1",
+
+//            Destinations = new Dictionary<string, DestinationConfig>(StringComparer.OrdinalIgnoreCase)
+//            {
+//                { "destination1", new() { Address = "https://localhost:5010" } },
+//            }
+//        }
+//    });
 
 builder.Services.AddHttpClient<IJwtTokenService, JwtTokenService>(c =>
         c.BaseAddress = new Uri(builder.Configuration["ApiConfigs:BackChannelApi:Uri"]));

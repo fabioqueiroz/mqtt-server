@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.12" />
     <PackageReference Include="Duende.BFF.Yarp" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.12" />
+    <PackageReference Include="OrchardCoreContrib.ReverseProxy.Yarp" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
