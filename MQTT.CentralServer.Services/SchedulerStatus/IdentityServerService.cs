@@ -67,7 +67,6 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError($"Unable to authenticate. Status response: {response.StatusCode}");
-                //throw new InvalidDataException($"{response.StatusCode}");
             }
 
             return response.IsSuccessStatusCode;

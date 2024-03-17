@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using MQTT.CentralServer.Api.Services;
 using MQTT.CentralServer.Api.Services.Interfaces;
+using MQTT.CentralServer.Api.SignalR;
 using MQTT.CentralServer.Data.Access;
 using MQTT.CentralServer.Data.Access.Interfaces;
 using MQTT.CentralServer.Data.Access.Repositories;
@@ -26,6 +28,8 @@ builder.Services
     .AddScoped<ISchedulerStatusRepository, SchedulerStatusRepository>()
     .AddScoped<ISchedulerStatusService, SchedulerStatusService>()
     .AddScoped<IIdentityServerService, IdentityServerService>();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddHttpClient<IIdentityServerService, IdentityServerService>();
 
@@ -59,6 +63,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapHub<MQTTMessageHub>("/messagehub");
 
 app.UseHttpsRedirection();
 
