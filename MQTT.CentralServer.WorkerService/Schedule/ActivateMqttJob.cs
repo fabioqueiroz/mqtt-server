@@ -73,6 +73,8 @@ namespace MQTT.CentralServer.WorkerService.Schedule
                 case (int)ServiceStatus.Initializing:
                     await statusRequest.ChangeStatus(new StartedJobStrategy(jobName));
                     break;
+                case (int)ServiceStatus.Started:
+                    break;
                 case (int)ServiceStatus.Closing:
                     await statusRequest.ChangeStatus(new EndedJobStrategy(jobName));
                     break;

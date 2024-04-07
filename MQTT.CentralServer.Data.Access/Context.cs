@@ -7,6 +7,7 @@ namespace MQTT.CentralServer.Data.Access
     public class Context : DbContext
     {
         public DbSet<SchedulerStatusInfo> SchedulerStatus { get; set; }
+        public DbSet<MqttMessage> Messages { get; set; }
 
         public Context() : base()
         {
@@ -21,6 +22,7 @@ namespace MQTT.CentralServer.Data.Access
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SchedulerStatusInfo>();
+            modelBuilder.Entity<MqttMessage>();
         }
     }
 }

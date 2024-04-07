@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MQTTnet.Server;
 using MQTTnet;
+using MQTT.CentralServer.Entities.Scheduler;
 
 namespace MQTT.CentralServer.WorkerService.Server
 {
@@ -56,7 +57,13 @@ namespace MQTT.CentralServer.WorkerService.Server
 
         Task MqttServer_InterceptingPublishAsync(InterceptingPublishEventArgs arg)
         {
+            var message = Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
             Console.WriteLine($"MqttServer_InterceptingPublishAsync - {arg.ApplicationMessage.Topic}: {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
+
+            var receivedMessage = MqttMessage.Create(topic: arg.ApplicationMessage.Topic, message: message, clientId: arg.ClientId);
+
+            // TODO: create service
+
             return Task.CompletedTask;
         }
 
