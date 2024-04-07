@@ -10,11 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using MQTT.CentralServer.Services.Interfaces;
-using MQTT.CentralServer.Entities.Enums;
-using Microsoft.Extensions.DependencyInjection;
-using MQTT.CentralServer.Data.Access.Repositories;
-using MQTT.CentralServer.Data.Access;
-using MQTT.CentralServer.Services.SchedulerStatus;
 using MQTT.CentralServer.WorkerService.Jobs.Constants;
 
 namespace MQTT.CentralServer.WorkerService.Services
@@ -59,17 +54,6 @@ namespace MQTT.CentralServer.WorkerService.Services
         public async Task StopAsync(CancellationToken cancellationToken)
         {
             Scheduler = await _factory.GetScheduler(cancellationToken);
-
-            //foreach (var jobSchedule in _jobSchedules)
-            //{
-            //    // replace this with something else not creating a new job
-            //    var job = CreateJob(jobSchedule);
-
-            //    if (await Scheduler.CheckExists(job.Key, cancellationToken))
-            //    {
-            //        await _schedulerStatusService.RecordSchedulerStatusAsync(job.Key.Name, cancellationToken);
-            //    }
-            //}
 
             await Scheduler!.Shutdown(cancellationToken);
           
@@ -123,19 +107,5 @@ namespace MQTT.CentralServer.WorkerService.Services
         {
             GC.SuppressFinalize(this);
         }
-
-        //private void Test(string jobName, CancellationToken cancellationToken)
-        //{
-        //    using (var serviceScope = _serviceProvider.GetService<IServiceScopeFactory>()!.CreateScope())
-        //    {
-        //        var _dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
-
-        //        var repository = new SchedulerStatusRepository(_dbcontext);
-
-        //        var service = new SchedulerStatusService(repository);
-
-        //        await service.RecordSchedulerStatusAsync(jobName, cancellationToken, ServiceStatus.Started);
-        //    }
-        //}
     }
 }

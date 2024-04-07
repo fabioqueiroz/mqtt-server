@@ -50,8 +50,6 @@ namespace MQTT.CentralServer.WorkerService.Schedule
                     var mqttServer = Server.MqttServer.Instance;
                     await mqttServer.StartMqttServer();
                 }
-
-                //await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
             }
         }
 

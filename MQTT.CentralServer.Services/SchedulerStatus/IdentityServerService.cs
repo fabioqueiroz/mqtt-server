@@ -36,11 +36,6 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
 
             var tokenResponse = await _httpClient.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
-                //// In-memory scope
-                //Address = discoDocument.TokenEndpoint,
-                //ClientId = _options.Value.IdentityServerApi.ClientId,
-                //ClientSecret = _options.Value.IdentityServerApi.ClientSecret,
-                //Scope = _options.Value.IdentityServerApi.Scope
                 Address = discoDocument.TokenEndpoint,
                 ClientId = _options.Value.IdentityProviderApi.ClientId,
                 ClientSecret = _options.Value.IdentityProviderApi.ClientSecret,
@@ -62,7 +57,6 @@ namespace MQTT.CentralServer.Services.SchedulerStatus
         {
             _httpClient.SetBearerToken(token);
 
-            //var response = await _httpClient.GetAsync("https://localhost:7031/Identity");
             var response = await _httpClient.GetAsync(_options.Value.IdentityServerApi.Uri);
             if (!response.IsSuccessStatusCode)
             {
