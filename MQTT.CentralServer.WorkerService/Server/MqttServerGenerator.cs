@@ -5,7 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using MQTTnet.Server;
 using MQTTnet;
-using MQTT.CentralServer.Entities.Scheduler;
+using MQTT.CentralServer.Entities.Message;
+using MQTT.CentralServer.Data.Access.Interfaces;
+using MQTT.CentralServer.Services.Interfaces;
+using MQTT.CentralServer.Services.Messages;
+using MQTT.CentralServer.Data.Access.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+using MQTT.CentralServer.Data.Access;
+using Microsoft.EntityFrameworkCore;
 
 namespace MQTT.CentralServer.WorkerService.Server
 {
@@ -55,22 +62,38 @@ namespace MQTT.CentralServer.WorkerService.Server
             return Task.CompletedTask;
         }
 
-        Task MqttServer_InterceptingPublishAsync(InterceptingPublishEventArgs arg)
+        async Task MqttServer_InterceptingPublishAsync(InterceptingPublishEventArgs arg)
         {
             var message = Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
             Console.WriteLine($"MqttServer_InterceptingPublishAsync - {arg.ApplicationMessage.Topic}: {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
 
-            var receivedMessage = MqttMessage.Create(topic: arg.ApplicationMessage.Topic, message: message, clientId: arg.ClientId);
-
-            // TODO: create service
-
-            return Task.CompletedTask;
+            var receivedMessage = MqttMessage.Create(topic: arg.ApplicationMessage.Topic, message: message, clientId: arg.ClientId);    
+            await AddReceivedMessageAsync(receivedMessage);
+            //return Task.CompletedTask;
         }
 
         Task MqttServer_LoadingRetainedMessageAsync(LoadingRetainedMessagesEventArgs arg)
         {
             Console.WriteLine("MqttServer_LoadingRetainedMessageAsync");
             return Task.CompletedTask;
+        }
+
+        private async Task AddReceivedMessageAsync(MqttMessage receivedMessage, CancellationToken cancellationToken = default)
+        {
+            var serviceProvider = new ServiceCollection()
+                    .AddDbContext<Context>(options =>
+                    options.UseSqlServer("Data Source=UKfqueMP26AKM7\\SQLEXPRESS;Initial Catalog=Quartz_Migration_1;Integrated Security=False;User Id=sa;Password=Fabio1980;MultipleActiveResultSets=True;TrustServerCertificate=True",
+                    opts =>
+                    {
+                        opts.EnableRetryOnFailure((int)TimeSpan.FromSeconds(5).TotalSeconds);
+                        opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
+                    }))
+                    .BuildServiceProvider();
+
+            using var scope = serviceProvider.CreateScope();
+            var dbcontext = serviceProvider.GetRequiredService<Context>();
+            var messageRepository = new MqttMessageRepository(dbcontext);
+            await messageRepository.AddAsync(receivedMessage, cancellationToken);
         }
     }
 }

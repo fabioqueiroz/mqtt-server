@@ -40,8 +40,8 @@ namespace MQTT.CentralServer.WorkerService.Schedule
 
             using (var serviceScope = _serviceProvider.GetService<IServiceScopeFactory>()!.CreateScope())
             {
-                var _dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
-                var schedulerRepository = new SchedulerStatusRepository(_dbcontext);
+                var dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
+                var schedulerRepository = new SchedulerStatusRepository(dbcontext);
 
                 await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
 
