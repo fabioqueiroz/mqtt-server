@@ -41,6 +41,7 @@ namespace MQTT.CentralServer.Api.Controllers
         [Route("[action]")]
         public async Task<IActionResult> StartJobService([FromBody]string token)
         {
+            // commented out for speeding up testingS
             //var isAuthenticated = await _identityServerService.AuthenticateWithTokenAsync(token);
             //if (!isAuthenticated)
             //{

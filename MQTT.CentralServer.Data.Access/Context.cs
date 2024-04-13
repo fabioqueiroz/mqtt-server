@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MQTT.CentralServer.Entities.Message;
 using MQTT.CentralServer.Entities.Scheduler;
 using System.Data;
 

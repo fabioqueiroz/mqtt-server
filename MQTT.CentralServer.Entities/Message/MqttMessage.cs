@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MQTT.CentralServer.Entities.Scheduler
+namespace MQTT.CentralServer.Entities.Message
 {
     public class MqttMessage
     {
@@ -17,27 +17,27 @@ namespace MQTT.CentralServer.Entities.Scheduler
 
         public static MqttMessage Create(string topic, string message, string clientId)
         {
-            if (string.IsNullOrEmpty(topic)) 
-            {  
-                throw new ArgumentNullException(nameof(topic)); 
-            } 
-            
-            if (string.IsNullOrEmpty(message)) 
-            { 
-                throw new ArgumentNullException(nameof(message)); 
-            } 
+            if (string.IsNullOrEmpty(topic))
+            {
+                throw new ArgumentNullException(nameof(topic));
+            }
+
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
             if (string.IsNullOrEmpty(clientId))
             {
                 throw new ArgumentNullException(nameof(clientId));
             }
 
-            return new MqttMessage 
-            { 
+            return new MqttMessage
+            {
                 Topic = topic,
-                Message = message, 
+                Message = message,
                 ClientId = clientId,
-                DateReceived = DateTime.UtcNow 
+                DateReceived = DateTime.UtcNow
             };
         }
     }
