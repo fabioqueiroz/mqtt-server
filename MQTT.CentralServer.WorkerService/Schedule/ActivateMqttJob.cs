@@ -7,6 +7,7 @@ using MQTT.CentralServer.Entities.Enums;
 using MQTT.CentralServer.Entities.Scheduler;
 using MQTT.CentralServer.Services.Interfaces;
 using MQTT.CentralServer.Services.SchedulerStatus;
+using MQTT.CentralServer.WorkerService.Server;
 using MQTT.CentralServer.WorkerService.Strategies;
 using Quartz;
 using Quartz.Impl;
@@ -42,12 +43,14 @@ namespace MQTT.CentralServer.WorkerService.Schedule
             {
                 var dbcontext = serviceScope.ServiceProvider.GetRequiredService<Context>();
                 var schedulerRepository = new SchedulerStatusRepository(dbcontext);
+                var mqttMessageRepository = new MqttMessageRepository(dbcontext);
 
                 await CreateOrUpdateJobAsync(status, jobName, schedulerRepository, context.CancellationToken);
 
                 if (status == (int)ServiceStatus.None || status == (int)ServiceStatus.Initializing || status == (int)ServiceStatus.Started)
                 {
-                    var mqttServer = Server.MqttServer.Instance;
+                    //var mqttServer = Server.MqttServer.Instance;
+                    var mqttServer = new MqttServer(mqttMessageRepository);
                     await mqttServer.StartMqttServer();
                 }
             }

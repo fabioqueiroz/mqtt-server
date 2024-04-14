@@ -12,7 +12,6 @@ namespace MQTT.CentralServer.Entities.Message
         public string Topic { get; init; } = string.Empty;
         public string Message { get; init; } = string.Empty;
         public string ClientId { get; init; } = string.Empty;
-
         public DateTime DateReceived { get; init; }
 
         public static MqttMessage Create(string topic, string message, string clientId)

@@ -13,11 +13,18 @@ using MQTT.CentralServer.Data.Access.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using MQTT.CentralServer.Data.Access;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace MQTT.CentralServer.WorkerService.Server
 {
     public class MqttServerGenerator
     {
+        private readonly IMqttMessageRepository _mqttMessageRepository;
+        public MqttServerGenerator(IMqttMessageRepository mqttMessageRepository)
+        {
+            _mqttMessageRepository = mqttMessageRepository;
+        }
+
         public async Task Generate()
         {
             Console.WriteLine("MQTT Server");
@@ -68,32 +75,13 @@ namespace MQTT.CentralServer.WorkerService.Server
             Console.WriteLine($"MqttServer_InterceptingPublishAsync - {arg.ApplicationMessage.Topic}: {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
 
             var receivedMessage = MqttMessage.Create(topic: arg.ApplicationMessage.Topic, message: message, clientId: arg.ClientId);    
-            await AddReceivedMessageAsync(receivedMessage);
-            //return Task.CompletedTask;
+            await _mqttMessageRepository.AddAsync(receivedMessage, new CancellationToken());
         }
 
         Task MqttServer_LoadingRetainedMessageAsync(LoadingRetainedMessagesEventArgs arg)
         {
             Console.WriteLine("MqttServer_LoadingRetainedMessageAsync");
             return Task.CompletedTask;
-        }
-
-        private async Task AddReceivedMessageAsync(MqttMessage receivedMessage, CancellationToken cancellationToken = default)
-        {
-            var serviceProvider = new ServiceCollection()
-                    .AddDbContext<Context>(options =>
-                    options.UseSqlServer("Data Source=UKfqueMP26AKM7\\SQLEXPRESS;Initial Catalog=Quartz_Migration_1;Integrated Security=False;User Id=sa;Password=Fabio1980;MultipleActiveResultSets=True;TrustServerCertificate=True",
-                    opts =>
-                    {
-                        opts.EnableRetryOnFailure((int)TimeSpan.FromSeconds(5).TotalSeconds);
-                        opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
-                    }))
-                    .BuildServiceProvider();
-
-            using var scope = serviceProvider.CreateScope();
-            var dbcontext = serviceProvider.GetRequiredService<Context>();
-            var messageRepository = new MqttMessageRepository(dbcontext);
-            await messageRepository.AddAsync(receivedMessage, cancellationToken);
         }
     }
 }
