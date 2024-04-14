@@ -97,7 +97,9 @@ namespace MQTT.CentralServer.WorkerService.Services
                 { "quartz.dataSource.default.provider", "SqlServer" },
                 { "quartz.jobStore.tablePrefix", "QRTZ_" },
                 { "quartz.jobStore.performSchemaValidation", "false" },
-                { "quartz.dataSource.default.connectionString", "Data Source=ZAISO-5079\\SQLEXPRESS;Initial Catalog=Quartz;Integrated Security=False;User Id=sa;Password=Fabio1980; TrustServerCertificate=True" },
+                // TODO: move the connection string elsewhere
+                //{ "quartz.dataSource.default.connectionString", "Data Source=.\\SQLEXPRESS;Initial Catalog=Quartz;Integrated Security=False;User Id=sa;Password=Fabio1980; TrustServerCertificate=True" },
+                { "quartz.dataSource.default.connectionString", "Data Source=.\\SQLEXPRESS;Initial Catalog=Quartz_Migration_1;Integrated Security=False;User Id=sa;Password=Fabio1980; TrustServerCertificate=True" },
                 { "quartz.jobStore.clustered", "false" },
                 { "quartz.jobStore.driverDelegateType", "Quartz.Impl.AdoJobStore.SqlServerDelegate, Quartz" }
             };

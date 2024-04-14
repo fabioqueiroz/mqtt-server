@@ -10,26 +10,14 @@ using System.Threading.Tasks;
 
 namespace MQTT.CentralServer.Data.Access.Repositories
 {
-    //public abstract class BaseRepository<TContext> : IBaseRepository<TContext> where TContext : DbContext, new()
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>// where TEntity : class
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
     {
-        //private TContext _context;
-
-        //public TContext Context { get => _context; set => _context = value; }
-
-        //protected BaseRepository()
-        //{
-        //    _context = new TContext();
-        //}
-
         private bool _disposed;
         public Context _context;
-        //internal DbSet<TEntity> _dbSet;
 
         public BaseRepository(Context context)
         {
             _context = context;
-            //_dbSet = context.Set<TEntity>();
         }
 
         public IQueryable<T> All<T>() where T : class
@@ -214,7 +202,6 @@ namespace MQTT.CentralServer.Data.Access.Repositories
 
                 throw innerException;
             }
-
         }
 
         public void Dispose()

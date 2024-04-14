@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MQTT.CentralServer.Data.Access.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,23 +10,28 @@ namespace MQTT.CentralServer.WorkerService.Server
     public class MqttServer
     {
         private static MqttServer? _instance;
-        private MqttServer()
+        private readonly IMqttMessageRepository _mqttMessageRepository;
+        public MqttServer(IMqttMessageRepository mqttMessageRepository)
         {
-
+            _mqttMessageRepository = mqttMessageRepository;
         }
 
-        public static MqttServer Instance
-        {
-            get
-            {
-                _instance ??= new MqttServer();
-                return _instance;
-            }
-        }
+        //public MqttServer()
+        //{            
+        //}
+
+        //public static MqttServer Instance
+        //{
+        //    get
+        //    {
+        //        _instance ??= new MqttServer();
+        //        return _instance;
+        //    }
+        //}
 
         public async Task StartMqttServer()
         {
-            var mqttServerGenerator = new MqttServerGenerator();
+            var mqttServerGenerator = new MqttServerGenerator(_mqttMessageRepository);
             await mqttServerGenerator.Generate();
         }
     }

@@ -8,6 +8,7 @@ using MQTT.CentralServer.Data.Access.Interfaces;
 using MQTT.CentralServer.Data.Access.Repositories;
 using MQTT.CentralServer.Entities.Options;
 using MQTT.CentralServer.Services.Interfaces;
+using MQTT.CentralServer.Services.Messages;
 using MQTT.CentralServer.Services.SchedulerStatus;
 using MQTT.CentralServer.WorkerService.Jobs;
 using MQTT.CentralServer.WorkerService.Schedule;
@@ -27,7 +28,9 @@ builder.Services
     .AddScoped<IMqttJobService, MqttJobService>()
     .AddScoped<ISchedulerStatusRepository, SchedulerStatusRepository>()
     .AddScoped<ISchedulerStatusService, SchedulerStatusService>()
-    .AddScoped<IIdentityServerService, IdentityServerService>();
+    .AddScoped<IIdentityServerService, IdentityServerService>()
+    .AddScoped<IMqttMessageRepository, MqttMessageRepository>()
+    .AddScoped<IMqttMessageService, MqttMessageService>();
 
 builder.Services.AddSignalR();
 
@@ -51,7 +54,6 @@ builder.Services.AddDbContext<Context>(options =>
         opts.CommandTimeout((int)TimeSpan.FromMinutes(2).TotalSeconds);
     }));
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

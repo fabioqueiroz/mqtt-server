@@ -5,11 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using MQTTnet.Server;
 using MQTTnet;
+using MQTT.CentralServer.Entities.Message;
+using MQTT.CentralServer.Data.Access.Interfaces;
+using MQTT.CentralServer.Services.Interfaces;
+using MQTT.CentralServer.Services.Messages;
+using MQTT.CentralServer.Data.Access.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+using MQTT.CentralServer.Data.Access;
+using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace MQTT.CentralServer.WorkerService.Server
 {
     public class MqttServerGenerator
     {
+        private readonly IMqttMessageRepository _mqttMessageRepository;
+        public MqttServerGenerator(IMqttMessageRepository mqttMessageRepository)
+        {
+            _mqttMessageRepository = mqttMessageRepository;
+        }
+
         public async Task Generate()
         {
             Console.WriteLine("MQTT Server");
@@ -54,10 +69,13 @@ namespace MQTT.CentralServer.WorkerService.Server
             return Task.CompletedTask;
         }
 
-        Task MqttServer_InterceptingPublishAsync(InterceptingPublishEventArgs arg)
+        async Task MqttServer_InterceptingPublishAsync(InterceptingPublishEventArgs arg)
         {
+            var message = Encoding.UTF8.GetString(arg.ApplicationMessage.Payload);
             Console.WriteLine($"MqttServer_InterceptingPublishAsync - {arg.ApplicationMessage.Topic}: {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
-            return Task.CompletedTask;
+
+            var receivedMessage = MqttMessage.Create(topic: arg.ApplicationMessage.Topic, message: message, clientId: arg.ClientId);    
+            await _mqttMessageRepository.AddAsync(receivedMessage, new CancellationToken());
         }
 
         Task MqttServer_LoadingRetainedMessageAsync(LoadingRetainedMessagesEventArgs arg)
